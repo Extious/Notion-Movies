@@ -47,6 +47,20 @@ export const BlogListScroll = props => {
     }, 500)
   )
   const showPageCover = siteConfig('MOVIE_POST_LIST_COVER', null, CONFIG)
+  const cardSize = siteConfig('MOVIE_CARD_SIZE', 'small', CONFIG)
+
+  // 根据卡片大小设置网格列数
+  const getGridClasses = () => {
+    switch (cardSize) {
+      case 'large':
+        return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+      case 'medium':
+        return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+      case 'small':
+      default:
+        return 'grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'
+    }
+  }
 
   useEffect(() => {
     window.addEventListener('scroll', scrollTrigger)
@@ -61,9 +75,11 @@ export const BlogListScroll = props => {
       id='posts-wrapper'
       className={`w-full ${showPageCover ? 'md:pr-2' : 'md:pr-12'}} mb-12`}
       ref={targetRef}>
-      {postsToShow?.map(post => (
-        <BlogPostCard key={post.id} post={post} />
-      ))}
+      <div className={`grid ${getGridClasses()} gap-4`}>
+        {postsToShow?.map(post => (
+          <BlogPostCard key={post.id} post={post} />
+        ))}
+      </div>
 
       <div
         onClick={handleGetMore}

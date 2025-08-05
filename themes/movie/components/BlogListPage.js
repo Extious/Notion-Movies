@@ -11,6 +11,21 @@ export const BlogListPage = props => {
   const totalPage = Math.ceil(postCount / POSTS_PER_PAGE)
 
   const showPageCover = siteConfig('MOVIE_POST_LIST_COVER', null, CONFIG)
+  const cardSize = siteConfig('MOVIE_CARD_SIZE', 'small', CONFIG)
+
+  // 根据卡片大小设置网格列数
+  const getGridClasses = () => {
+    switch (cardSize) {
+      case 'large':
+        return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+      case 'medium':
+        return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+      case 'small':
+      default:
+        return 'grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'
+    }
+  }
+
   if (!posts || posts.length === 0) {
     return null
   }
@@ -19,7 +34,7 @@ export const BlogListPage = props => {
     <div className={`w-full ${showPageCover ? 'md:pr-2' : 'md:pr-12'} py-6`}>
       <div
         id='posts-wrapper'
-        className='grid md:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:gap-20 xl:gap-24 2xl:grid-cols-4'>
+        className={`grid ${getGridClasses()} gap-4`}>
         {posts?.map(post => (
           <BlogPostCard key={post.id} post={post} />
         ))}
